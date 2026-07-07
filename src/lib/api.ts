@@ -26,18 +26,20 @@ interface PaginationOptions {
   page?: number;
   size?: number;
   sort?: string;
+  q?: string;
 }
 
 export async function getProgramasByTipo(
   tipoSlug: string,
   options: PaginationOptions = {}
 ): Promise<PagedResponse<Programa>> {
-  const { page = 0, size = 10, sort = "nombre,asc" } = options;
+  const { page = 0, size = 10, sort = "nombre,asc", q } = options;
   const params = new URLSearchParams({
     page: String(page),
     size: String(size),
     sort,
   });
+  if (q) params.set("q", q);
   const result = await fetchApi<PagedResponse<Programa>>(
     `/tipos-programas/${tipoSlug}/programa?${params}`
   );

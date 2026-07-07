@@ -6,6 +6,7 @@ interface Props {
   totalPages: number;
   totalElements: number;
   size: number;
+  q?: string;
 }
 
 export default function Paginacion({
@@ -14,12 +15,14 @@ export default function Paginacion({
   totalPages,
   totalElements,
   size,
+  q,
 }: Props) {
   if (totalPages <= 1) return null;
 
   const isFirst = page === 0;
   const isLast = page >= totalPages - 1;
   const displayPage = page + 1;
+  const qSuffix = q ? `&q=${encodeURIComponent(q)}` : "";
 
   return (
     <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-between">
@@ -34,7 +37,7 @@ export default function Paginacion({
           </span>
         ) : (
           <Link
-            href={`/${tipoSlug}?page=${page - 1}&size=${size}`}
+            href={`/${tipoSlug}?page=${page - 1}&size=${size}${qSuffix}`}
             className="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
           >
             &larr; Anterior
@@ -47,7 +50,7 @@ export default function Paginacion({
           </span>
         ) : (
           <Link
-            href={`/${tipoSlug}?page=${page + 1}&size=${size}`}
+            href={`/${tipoSlug}?page=${page + 1}&size=${size}${qSuffix}`}
             className="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
           >
             Siguiente &rarr;

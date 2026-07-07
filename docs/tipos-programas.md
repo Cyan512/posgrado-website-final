@@ -75,11 +75,12 @@ Obtiene los programas que pertenecen a un tipo de programa, buscando por slug, c
 
 - **Query params:**
 
-| Parámetro | Tipo | Default | Descripción |
-|-----------|------|---------|-------------|
-| `page` | `int` | `0` | Número de página (0-based) |
-| `size` | `int` | `10` | Cantidad de elementos por página |
-| `sort` | `String` | `nombre,asc` | Campo y dirección: `campo,asc` o `campo,desc` |
+| Parámetro | Tipo | Default | Requerido | Descripción |
+|-----------|------|---------|-----------|-------------|
+| `page` | `int` | `0` | No | Número de página (0-based) |
+| `size` | `int` | `10` | No | Cantidad de elementos por página |
+| `sort` | `String` | `nombre,asc` | No | Campo y dirección: `campo,asc` o `campo,desc` |
+| `q` | `String` | — | No | Texto a buscar en el nombre del programa. **Accent-insensitive y case-insensitive**: `edu` matchea "Educación", `EDUCACION` también. Si está vacío o no se envía, devuelve todos. |
 
 - **Respuestas:**
 
@@ -90,19 +91,27 @@ Obtiene los programas que pertenecen a un tipo de programa, buscando por slug, c
 
 - **Ejemplo cURL:**
 ```bash
-curl -X GET "http://localhost:8080/api/public/v1/tipos-programas/maestria/programa?page=0&size=10&sort=nombre,asc" \
+curl -X GET "http://localhost:8080/api/public/v1/tipos-programas/maestria/programa?q=edu&page=0&size=10&sort=nombre,asc" \
   -H "Accept: application/json"
 ```
 
 - **Ejemplo JavaScript Fetch:**
 ```js
 const slug = 'maestria';
-const params = new URLSearchParams({ page: '0', size: '10', sort: 'nombre,asc' });
+const searchInput = document.getElementById('search')?.value || '';
+const params = new URLSearchParams({
+  page: '0',
+  size: '10',
+  sort: 'nombre,asc'
+});
+if (searchInput.trim()) {
+  params.append('q', searchInput.trim());
+}
 const response = await fetch(`http://localhost:8080/api/public/v1/tipos-programas/${slug}/programa?${params}`);
 const json = await response.json();
 if (json.success) {
   const { content, totalPages, totalElements } = json.data;
-  console.log(`Pagina ${json.data.page + 1} de ${totalPages} (${totalElements} programas en total)`);
+  console.log(`${totalElements} resultados`);
   content.forEach(p => console.log(p.nombre));
 } else {
   console.error(json.errorCode, json.message);
@@ -202,5 +211,11 @@ if (json.success) {
 | Código | Causa | Solución |
 |--------|-------|----------|
 | `TIPO_PROGRAMA_NOT_FOUND` | El slug no corresponde a ningún tipo de programa | Usar el slug exacto (ver `GET /`) |
-| `PROGRAMA_NOT_FOUND` | Página fuera de rango o slug de programa inválido | Revisar parámetros de paginación |
 | `INTERNAL_ERROR` | Error inesperado del servidor | Contactar al equipo de backend |
+
+> **Nota sobre el filtro `q`:**
+> - Búsqueda **accent-insensitive** y **case-insensitive** mediante columna dedicada `nombre_normalized` (auto-poblada al crear/actualizar y al iniciar la app).
+> - `?q=edu` matchea "Doctorado en Educación".
+> - `?q=EDUCACION` (sin tilde, mayúsculas) matchea "Doctorado en Educación".
+> - Si el filtro no devuelve resultados, el endpoint responde 200 con `content: []` y `totalElements: 0`. No es un error.
+> - `?q=` (vacío) o sin `q` devuelve todos los programas paginados.
