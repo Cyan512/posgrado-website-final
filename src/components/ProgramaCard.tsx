@@ -1,33 +1,42 @@
 import Link from "next/link";
 import type { Programa } from "@/src/lib/types";
+import { MODALIDAD_MAP } from "@/src/lib/constants";
+import Card from "./ui/Card";
+import Badge from "./ui/Badge";
+import { Building2, ArrowUpRight } from "lucide-react";
 
 interface Props {
   programa: Programa;
   tipoSlug: string;
 }
 
-const modalidadBadge: Record<string, string> = {
-  PRESENCIAL: "bg-green-100 text-green-800",
-  SEMIPRESENCIAL: "bg-blue-100 text-blue-800",
-  VIRTUAL: "bg-purple-100 text-purple-800",
-  "NO CONVOCABLE": "bg-red-100 text-red-800",
-};
-
 export default function ProgramaCard({ programa, tipoSlug }: Props) {
+  const modalidad = MODALIDAD_MAP[programa.modalidad] ?? {
+    label: programa.modalidad,
+    color: "bg-slate-50 text-slate-600 ring-slate-500/10",
+  };
+
   return (
-    <Link
-      href={`/${tipoSlug}/${programa.slug}`}
-      className="block rounded-lg border border-gray-200 bg-white p-5 shadow-sm transition-all hover:shadow-md hover:border-gray-300"
-    >
-      <h3 className="font-semibold text-gray-900">{programa.nombre}</h3>
-      <p className="mt-1 text-sm text-gray-500">
-        {programa.facultad?.nombreFacultad ?? "Sin facultad asignada"}
-      </p>
-      <span
-        className={`mt-3 inline-block rounded-full px-3 py-1 text-xs font-medium ${modalidadBadge[programa.modalidad] ?? "bg-gray-100 text-gray-800"}`}
-      >
-        {programa.modalidad}
-      </span>
+    <Link href={`/${tipoSlug}/${programa.slug}`} className="group block">
+      <Card className="h-full">
+        <div className="flex h-full flex-col p-5">
+          <div className="flex items-start justify-between gap-2">
+            <h3 className="flex-1 font-semibold text-slate-900 group-hover:text-brand-700 transition-colors">
+              {programa.nombre}
+            </h3>
+            <ArrowUpRight className="mt-0.5 h-5 w-5 flex-shrink-0 text-slate-300 transition-all duration-200 group-hover:text-brand-600 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+          </div>
+
+          <div className="mt-2 flex items-center gap-1.5 text-sm text-slate-500">
+            <Building2 className="h-3.5 w-3.5" />
+            {programa.facultad?.nombreFacultad ?? "Sin facultad asignada"}
+          </div>
+
+          <div className="mt-auto pt-4">
+            <Badge color={modalidad.color}>{modalidad.label}</Badge>
+          </div>
+        </div>
+      </Card>
     </Link>
   );
 }

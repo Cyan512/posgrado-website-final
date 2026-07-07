@@ -1,51 +1,73 @@
 import type { AsignaturaPorPeriodo } from "@/src/lib/types";
+import { CATEGORIA_MAP } from "@/src/lib/constants";
+import Badge from "./ui/Badge";
 
 interface Props {
   bloque: AsignaturaPorPeriodo;
 }
 
-const categoriaLabel: Record<string, string> = {
-  OE: "Obligatoria Específica",
-  EE: "Electiva Específica",
-};
-
 export default function AsignaturaPeriodo({ bloque }: Props) {
   return (
-    <div className="mb-6">
-      <h3 className="mb-3 text-xl font-semibold text-gray-800">
+    <div className="mb-8">
+      <h3 className="mb-4 text-lg font-semibold text-slate-800">
         {bloque.periodo.nombrePeriodo}
       </h3>
-      <div className="overflow-hidden rounded-lg border border-gray-200">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                Asignatura
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                Créditos
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                Categoría
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200 bg-white">
-            {bloque.asignaturas.map((asig, index) => (
-              <tr key={index}>
-                <td className="px-4 py-3 text-sm text-gray-900">
-                  {asig.nombreAsignatura}
-                </td>
-                <td className="px-4 py-3 text-sm text-gray-600">
-                  {asig.creditos}
-                </td>
-                <td className="px-4 py-3 text-sm text-gray-600">
-                  {categoriaLabel[asig.categoria] ?? asig.categoria}
-                </td>
+      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-slate-200">
+            <caption className="sr-only">
+              Asignaturas de {bloque.periodo.nombrePeriodo}
+            </caption>
+            <thead>
+              <tr className="bg-slate-50">
+                <th
+                  scope="col"
+                  className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500"
+                >
+                  Asignatura
+                </th>
+                <th
+                  scope="col"
+                  className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500"
+                >
+                  Créditos
+                </th>
+                <th
+                  scope="col"
+                  className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500"
+                >
+                  Categoría
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {bloque.asignaturas.map((asig, index) => (
+                <tr
+                  key={index}
+                  className="transition-colors hover:bg-slate-50/50"
+                >
+                  <td className="whitespace-nowrap px-5 py-3.5 text-sm font-medium text-slate-900">
+                    {asig.nombreAsignatura}
+                  </td>
+                  <td className="whitespace-nowrap px-5 py-3.5 text-sm text-slate-600">
+                    {asig.creditos}
+                  </td>
+                  <td className="whitespace-nowrap px-5 py-3.5 text-sm">
+                    <Badge
+                      color={
+                        asig.categoria === "OE"
+                          ? "bg-brand-50 text-brand-700 ring-brand-600/20"
+                          : "bg-amber-50 text-amber-700 ring-amber-600/20"
+                      }
+                    >
+                      {CATEGORIA_MAP[asig.categoria] ?? asig.categoria}
+                    </Badge>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

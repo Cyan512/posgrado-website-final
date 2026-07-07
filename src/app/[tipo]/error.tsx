@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import Link from "next/link";
+import { AlertTriangle } from "lucide-react";
+import Button from "@/src/components/ui/Button";
 
 export default function TipoError({
   error,
@@ -15,22 +16,22 @@ export default function TipoError({
   }, [error]);
 
   return (
-    <div className="flex flex-col items-center justify-center py-24">
-      <h1 className="text-2xl font-bold text-gray-900">Error al cargar</h1>
-      <p className="mt-2 text-gray-500">{error.message}</p>
+    <div className="flex flex-col items-center justify-center py-24 text-center">
+      <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-rose-50">
+        <AlertTriangle className="h-8 w-8 text-rose-600" />
+      </div>
+      <h1 className="text-xl font-semibold text-slate-900">Error al cargar</h1>
+      <p className="mt-2 max-w-sm text-sm text-slate-500">{error.message}</p>
       <div className="mt-6 flex gap-3">
         <button
           onClick={reset}
-          className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 transition-colors"
+          className="inline-flex items-center gap-2 rounded-lg bg-brand-800 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-brand-700 transition-colors"
         >
           Reintentar
         </button>
-        <Link
-          href="/"
-          className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-        >
+        <Button href="/" variant="secondary">
           Volver al inicio
-        </Link>
+        </Button>
       </div>
     </div>
   );

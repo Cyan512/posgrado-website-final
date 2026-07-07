@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { AlertTriangle } from "lucide-react";
 
 export default function ProgramaError({
   error,
@@ -14,12 +15,15 @@ export default function ProgramaError({
   }, [error]);
 
   return (
-    <div className="flex flex-col items-center justify-center py-24">
-      <h1 className="text-2xl font-bold text-gray-900">Error al cargar</h1>
-      <p className="mt-2 text-gray-500">{error.message}</p>
+    <div className="flex flex-col items-center justify-center py-24 text-center">
+      <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-rose-50">
+        <AlertTriangle className="h-8 w-8 text-rose-600" />
+      </div>
+      <h1 className="text-xl font-semibold text-slate-900">Error al cargar</h1>
+      <p className="mt-2 max-w-sm text-sm text-slate-500">{error.message}</p>
       <button
         onClick={reset}
-        className="mt-6 rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 transition-colors"
+        className="mt-6 inline-flex items-center gap-2 rounded-lg bg-brand-800 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-brand-700 transition-colors"
       >
         Reintentar
       </button>

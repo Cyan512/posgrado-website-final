@@ -1,8 +1,11 @@
-import Link from "next/link";
 import { getTiposProgramas, getProgramasByTipo } from "@/src/lib/api";
+import { TIPO_DESCRIPCION_MAP } from "@/src/lib/constants";
+import Container from "@/src/components/layout/Container";
+import Breadcrumb from "@/src/components/layout/Breadcrumb";
 import ProgramaCard from "@/src/components/ProgramaCard";
 import Paginacion from "@/src/components/Paginacion";
 import Buscador from "@/src/components/Buscador";
+import EmptyState from "@/src/components/ui/EmptyState";
 
 interface Props {
   params: Promise<{ tipo: string }>;
@@ -23,36 +26,45 @@ export default async function TipoPage({ params, searchParams }: Props) {
   const q = sp.q ?? "";
 
   const result = await getProgramasByTipo(tipo, { page, size, q });
+  const descripcion = TIPO_DESCRIPCION_MAP[tipo] ?? `Programas de ${tipo}.`;
 
   return (
-    <div>
-      <Link
-        href="/"
-        className="mb-6 inline-block text-sm text-gray-500 hover:text-gray-700 transition-colors"
-      >
-        &larr; Inicio
-      </Link>
+    <Container className="py-8 sm:py-12">
+      <Breadcrumb items={[{ label: tipo, href: `/${tipo}` }]} />
 
-      <h1 className="mb-4 text-3xl font-bold text-gray-900 capitalize">
-        {tipo}
-      </h1>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold tracking-tight text-slate-900 capitalize sm:text-4xl">
+          {tipo}
+        </h1>
+        <p className="mt-2 text-slate-500">{descripcion}</p>
+      </div>
 
       <Buscador tipoSlug={tipo} q={q} size={size} />
 
       {q && (
-        <p className="mb-4 text-sm text-gray-500">
-          Resultados para &quot;{q}&quot; ({result.totalElements})
+        <p className="mb-4 text-sm text-slate-500">
+          {result.totalElements} resultado{result.totalElements !== 1 ? "s" : ""} para &quot;{q}&quot;
         </p>
       )}
 
       {result.content.length === 0 ? (
-        <p className="mt-6 text-gray-500">
-          {q
-            ? "No se encontraron programas con ese criterio."
-            : "No hay programas disponibles para esta categoría."}
-        </p>
+        <EmptyState
+          icon="search"
+          title={
+            q
+              ? "Sin resultados"
+              : "No hay programas disponibles"
+          }
+          description={
+            q
+              ? "No se encontraron programas que coincidan con tu búsqueda."
+              : "No hay programas disponibles para esta categoría en este momento."
+          }
+          actionLabel="Ver todos los programas"
+          actionHref="/"
+        />
       ) : (
-        <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {result.content.map((p) => (
             <ProgramaCard key={p.id} programa={p} tipoSlug={tipo} />
           ))}
@@ -67,6 +79,6 @@ export default async function TipoPage({ params, searchParams }: Props) {
         size={result.size}
         q={q || undefined}
       />
-    </div>
+    </Container>
   );
 }
