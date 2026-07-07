@@ -31,8 +31,8 @@ export default function AsignaturaPeriodo({ bloque }: Props) {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
-            {bloque.asignaturas.map((asig) => (
-              <tr key={asig.id}>
+            {bloque.asignaturas.map((asig, index) => (
+              <tr key={index}>
                 <td className="px-4 py-3 text-sm text-gray-900">
                   {asig.nombreAsignatura}
                 </td>
