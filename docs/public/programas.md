@@ -60,6 +60,9 @@ if (json.success) {
       "id": 1,
       "nombreFacultad": "Facultad de Ingeniería"
     },
+    "objetivoGeneral": "Formar investigadores...",
+    "objetivosEspecificos": "...",
+    "perfilPosgraduado": "...",
     "asignaturasPorPeriodo": [
       {
         "periodo": {
@@ -75,7 +78,16 @@ if (json.success) {
           }
         ]
       }
-    ]
+    ],
+    "inversion": {
+      "costoMatricula": 1500.00,
+      "numeroMatriculas": 2,
+      "costoTotalMatriculas": 3000.00,
+      "costoCursos": 5400.00,
+      "cuotasPorSemestre": 6,
+      "numeroCuotas": 12,
+      "inversionTotal": 8400.00
+    }
   },
   "timestamp": 1712345678
 }
@@ -104,6 +116,22 @@ if (json.success) {
 | `modalidad` | `String` | Modalidad: `PRESENCIAL`, `SEMIPRESENCIAL`, `VIRTUAL` o `NO CONVOCABLE` |
 | `facultad` | `Facultad` | Facultad a la que pertenece |
 | `asignaturasPorPeriodo` | `List<AsignaturaPorPeriodoResponse>` | Asignaturas agrupadas por periodo |
+| `objetivoGeneral` | `String` | Objetivo general del programa |
+| `objetivosEspecificos` | `String` | Objetivos específicos |
+| `perfilPosgraduado` | `String` | Perfil del posgraduado |
+| `inversion` | `InversionPrograma` | Análisis de inversión del programa |
+
+### InversionPrograma
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| `costoMatricula` | `BigDecimal` | Costo de matrícula por semestre |
+| `numeroMatriculas` | `Integer` | Número de semestres (solo periodos con "semestre" en el nombre) |
+| `costoTotalMatriculas` | `BigDecimal` | `numeroMatriculas × costoMatricula` |
+| `costoCursos` | `BigDecimal` | Suma del costo de todos los cursos en los semestres (excluye electivos y otros) |
+| `cuotasPorSemestre` | `Integer` | Número de cuotas configuradas por semestre |
+| `numeroCuotas` | `Integer` | `cuotasPorSemestre × numeroMatriculas` |
+| `inversionTotal` | `BigDecimal` | `costoTotalMatriculas + costoCursos` |
 
 ### Facultad
 

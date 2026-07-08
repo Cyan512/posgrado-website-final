@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { PosgradoApiError } from "./errors";
 import type {
   ApiResult,
   ErrorResponse,
@@ -10,16 +11,27 @@ import type {
 
 const BASE_URL = process.env.API_BASE_URL ?? "http://localhost:8080/api/public/v1";
 
-async function fetchApi<T>(path: string): Promise<ApiResult<T> | ErrorResponse> {
+async function fetchApi<T>(path: string): Promise<T> {
   const res = await fetch(`${BASE_URL}${path}`, { cache: "no-store" });
   const json = (await res.json()) as ApiResult<T> | ErrorResponse;
-  return json;
+
+  if (!json.success) {
+    throw new PosgradoApiError(
+      json.errorCode as PosgradoApiError["errorCode"],
+      json.message,
+      res.status
+    );
+  }
+
+  return json.data;
 }
 
 export async function getTiposProgramas(): Promise<TipoPrograma[]> {
-  const result = await fetchApi<TipoPrograma[]>("/tipos-programas");
-  if (!result.success) throw new Error(result.message);
-  return result.data;
+  try {
+    return await fetchApi<TipoPrograma[]>("/tipos-programas");
+  } catch (err) {
+    throw err;
+  }
 }
 
 interface PaginationOptions {
@@ -40,25 +52,30 @@ export async function getProgramasByTipo(
     sort,
   });
   if (q) params.set("q", q);
-  const result = await fetchApi<PagedResponse<Programa>>(
-    `/tipos-programas/${tipoSlug}/programa?${params}`
-  );
-  if (!result.success) {
-    if (result.errorCode === "TIPO_PROGRAMA_NOT_FOUND") notFound();
-    throw new Error(result.message);
+
+  try {
+    return await fetchApi<PagedResponse<Programa>>(
+      `/tipos-programas/${tipoSlug}/programa?${params}`
+    );
+  } catch (err) {
+    if (err instanceof PosgradoApiError) {
+      if (err.errorCode === "TIPO_PROGRAMA_NOT_FOUND") notFound();
+    }
+    throw err;
   }
-  return result.data;
 }
 
 export async function getProgramaBySlug(
   slug: string
 ): Promise<ProgramaDetalleResponse> {
-  const result = await fetchApi<ProgramaDetalleResponse>(
-    `/programas/slug/${slug}`
-  );
-  if (!result.success) {
-    if (result.errorCode === "PROGRAMA_NOT_FOUND") notFound();
-    throw new Error(result.message);
+  try {
+    return await fetchApi<ProgramaDetalleResponse>(
+      `/programas/slug/${slug}`
+    );
+  } catch (err) {
+    if (err instanceof PosgradoApiError) {
+      if (err.errorCode === "PROGRAMA_NOT_FOUND") notFound();
+    }
+    throw err;
   }
-  return result.data;
 }

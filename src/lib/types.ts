@@ -29,7 +29,7 @@ export interface Programa {
   slug: string;
   facultad: Facultad | null;
   tipoPrograma: TipoPrograma;
-  modalidad: string;
+  modalidad: string | null;
 }
 
 export interface Periodo {
@@ -41,7 +41,7 @@ export interface Asignatura {
   id: number;
   nombreAsignatura: string;
   creditos: number;
-  categoria: string;
+  categoria: "OE" | "EE";
 }
 
 export interface AsignaturaPorPeriodo {
@@ -59,11 +59,25 @@ export interface PagedResponse<T> {
   last: boolean;
 }
 
+export interface InversionPrograma {
+  costoMatricula: number;
+  numeroMatriculas: number;
+  costoTotalMatriculas: number;
+  costoCursos: number;
+  cuotasPorSemestre: number;
+  numeroCuotas: number;
+  inversionTotal: number;
+}
+
 export interface ProgramaDetalleResponse {
   id: number;
   nombre: string;
   slug: string;
-  modalidad: string;
+  modalidad: string | null;
   facultad: Facultad | null;
+  objetivoGeneral: string | null;
+  objetivosEspecificos: string | null;
+  perfilPosgraduado: string | null;
   asignaturasPorPeriodo: AsignaturaPorPeriodo[];
+  inversion: InversionPrograma;
 }

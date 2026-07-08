@@ -14,12 +14,17 @@ export default function ProgramaLoading() {
         <Skeleton className="h-20" />
       </div>
 
-      {Array.from({ length: 3 }).map((_, i) => (
-        <div key={i} className="mb-8">
-          <Skeleton className="mb-4 h-6 w-44" />
-          <Skeleton className="h-48" />
-        </div>
-      ))}
+      <div className="mb-6 flex gap-0 border-b border-slate-200 pb-0">
+        <Skeleton className="h-10 w-28 rounded-none" />
+        <Skeleton className="ml-0 h-10 w-36 rounded-none" />
+        <Skeleton className="ml-0 h-10 w-24 rounded-none" />
+      </div>
+
+      <div className="mt-6 space-y-4">
+        <Skeleton className="h-32" />
+        <Skeleton className="h-24" />
+        <Skeleton className="h-24" />
+      </div>
     </div>
   );
 }

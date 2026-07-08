@@ -11,8 +11,8 @@ interface Props {
 }
 
 export default function ProgramaCard({ programa, tipoSlug }: Props) {
-  const modalidad = MODALIDAD_MAP[programa.modalidad] ?? {
-    label: programa.modalidad,
+  const modalidad = MODALIDAD_MAP[programa.modalidad ?? ""] ?? {
+    label: programa.modalidad ?? "N/A",
     color: "bg-slate-50 text-slate-600 ring-slate-500/10",
   };
 

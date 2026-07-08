@@ -1,4 +1,5 @@
 import { Search, X } from "lucide-react";
+import Link from "next/link";
 
 interface Props {
   tipoSlug: string;
@@ -20,19 +21,13 @@ export default function Buscador({ tipoSlug, q, size }: Props) {
         />
         <div className="absolute right-2 top-1/2 flex -translate-y-1/2 items-center gap-1">
           {q && (
-            <button
-              type="button"
-              onClick={() => {
-                const url = new URL(window.location.href);
-                url.searchParams.delete("q");
-                url.searchParams.set("page", "0");
-                window.location.href = url.toString();
-              }}
+            <Link
+              href={`/${tipoSlug}?page=0&size=${size}`}
               className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors"
               aria-label="Limpiar búsqueda"
             >
               <X className="h-3.5 w-3.5" />
-            </button>
+            </Link>
           )}
           <input type="hidden" name="size" value={size} />
           <button

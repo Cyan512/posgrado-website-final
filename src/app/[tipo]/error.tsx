@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { AlertTriangle } from "lucide-react";
+import { PosgradoApiError, getErrorMessage } from "@/src/lib/errors";
 import Button from "@/src/components/ui/Button";
 
 export default function TipoError({
@@ -15,13 +16,18 @@ export default function TipoError({
     console.error(error);
   }, [error]);
 
+  const message =
+    error instanceof PosgradoApiError
+      ? getErrorMessage(error.errorCode)
+      : error.message || "Error desconocido al cargar la página.";
+
   return (
     <div className="flex flex-col items-center justify-center py-24 text-center">
       <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-rose-50">
         <AlertTriangle className="h-8 w-8 text-rose-600" />
       </div>
       <h1 className="text-xl font-semibold text-slate-900">Error al cargar</h1>
-      <p className="mt-2 max-w-sm text-sm text-slate-500">{error.message}</p>
+      <p className="mt-2 max-w-sm text-sm text-slate-500">{message}</p>
       <div className="mt-6 flex gap-3">
         <button
           onClick={reset}
