@@ -1,4 +1,4 @@
-import type { AsignaturaPorPeriodo } from "@/src/lib/types";
+﻿import type { AsignaturaPorPeriodo } from "@/lib/types";
 import AsignaturaPeriodo from "./AsignaturaPeriodo";
 import EmptyState from "./ui/EmptyState";
 

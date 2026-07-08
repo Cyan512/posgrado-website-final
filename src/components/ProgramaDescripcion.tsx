@@ -1,4 +1,4 @@
-import type { ProgramaDetalleResponse } from "@/src/lib/types";
+﻿import type { ProgramaDetalleResponse } from "@/lib/types";
 import { Target, ListChecks, UserCheck } from "lucide-react";
 
 interface Props {

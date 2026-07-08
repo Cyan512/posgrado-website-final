@@ -1,6 +1,6 @@
-import type { ProgramaDetalleResponse } from "@/src/lib/types";
-import { MODALIDAD_MAP } from "@/src/lib/constants";
-import Badge from "./ui/Badge";
+﻿import type { ProgramaDetalleResponse } from "@/lib/types";
+import { MODALIDAD_MAP } from "@/lib/constants";
+import { Badge } from "./ui/Badge";
 import { Building2, Clock, GraduationCap } from "lucide-react";
 
 interface Props {
@@ -36,7 +36,7 @@ export default function ProgramaHeader({ programa }: Props) {
           {programa.facultad?.nombreFacultad ?? "Sin facultad asignada"}
         </div>
         <span className="text-slate-300 select-none">&middot;</span>
-        <Badge color={modalidad.color}>{modalidad.label}</Badge>
+        <Badge variant="outline" className={`${modalidad.color} text-xs`}>{modalidad.label}</Badge>
       </div>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-3">

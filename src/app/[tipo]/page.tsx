@@ -1,15 +1,41 @@
-import { getTiposProgramas, getProgramasByTipo } from "@/src/lib/api";
-import { TIPO_DESCRIPCION_MAP } from "@/src/lib/constants";
-import Container from "@/src/components/layout/Container";
-import Breadcrumb from "@/src/components/layout/Breadcrumb";
-import ProgramaCard from "@/src/components/ProgramaCard";
-import Paginacion from "@/src/components/Paginacion";
-import Buscador from "@/src/components/Buscador";
-import EmptyState from "@/src/components/ui/EmptyState";
+﻿import { getTiposProgramas, getProgramasByTipo } from "@/lib/api";
+import { TIPO_DESCRIPCION_MAP } from "@/lib/constants";
+import type { Metadata } from "next";
+import Container from "@/components/layout/Container";
+import Breadcrumb from "@/components/layout/Breadcrumb";
+import ProgramaCard from "@/components/ProgramaCard";
+import { SectionHeader } from "@/components/brand/SectionHeader";
+import EmptyState from "@/components/ui/EmptyState";
+import { Input } from "@/components/ui/input";
+import { Search, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 interface Props {
   params: Promise<{ tipo: string }>;
   searchParams: Promise<{ page?: string; size?: string; q?: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { tipo } = await params;
+  const desc = TIPO_DESCRIPCION_MAP[tipo] ?? `Programas de ${tipo}.`;
+  return {
+    title: tipo.charAt(0).toUpperCase() + tipo.slice(1),
+    description: desc,
+    openGraph: {
+      title: `${tipo.charAt(0).toUpperCase() + tipo.slice(1)} | Posgrado`,
+      description: desc,
+    },
+  };
 }
 
 export async function generateStaticParams() {
@@ -22,63 +48,138 @@ export default async function TipoPage({ params, searchParams }: Props) {
   const sp = await searchParams;
 
   const page = Number(sp.page) || 0;
-  const size = Number(sp.size) || 10;
+  const size = Number(sp.size) || 9;
   const q = sp.q ?? "";
 
   const result = await getProgramasByTipo(tipo, { page, size, q });
-  const descripcion = TIPO_DESCRIPCION_MAP[tipo] ?? `Programas de ${tipo}.`;
+  const descripcion =
+    TIPO_DESCRIPCION_MAP[tipo] ?? `Programas de ${tipo}.`;
+
+  const totalPages = result.totalPages;
 
   return (
-    <Container className="py-8 sm:py-12">
-      <Breadcrumb items={[{ label: tipo, href: `/${tipo}` }]} />
+    <>
+      <section className="border-b border-border bg-muted/30 py-12 sm:py-16">
+        <Container>
+          <Breadcrumb items={[{ label: tipo, href: `/${tipo}` }]} />
+          <SectionHeader
+            title={tipo.charAt(0).toUpperCase() + tipo.slice(1)}
+            description={descripcion}
+            align="left"
+            className="!mx-0 mt-6 !max-w-none"
+          />
+        </Container>
+      </section>
 
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900 capitalize sm:text-4xl">
-          {tipo}
-        </h1>
-        <p className="mt-2 text-slate-500">{descripcion}</p>
-      </div>
+      <Container className="py-8 sm:py-12">
+        <form method="get" action={`/${tipo}`} className="mb-8">
+          <div className="relative">
+            <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              type="search"
+              name="q"
+              defaultValue={q}
+              placeholder="Buscar programa por nombre..."
+              className="h-11 pl-10 pr-24 text-base"
+            />
+            <div className="absolute right-1.5 top-1/2 flex -translate-y-1/2 items-center gap-1">
+              {q && (
+                <Button variant="ghost" size="icon" asChild className="h-8 w-8" aria-label="Limpiar búsqueda">
+                  <Link href={`/${tipo}?page=0&size=${size}`}>
+                    <X className="h-3.5 w-3.5" />
+                  </Link>
+                </Button>
+              )}
+              <input type="hidden" name="size" value={size} />
+              <Button type="submit" size="sm">
+                Buscar
+              </Button>
+            </div>
+          </div>
+        </form>
 
-      <Buscador tipoSlug={tipo} q={q} size={size} />
+        {q && (
+          <p className="mb-6 text-sm text-muted-foreground">
+            {result.totalElements} resultado{result.totalElements !== 1 ? "s" : ""}{" "}
+            para &quot;{q}&quot;
+          </p>
+        )}
 
-      {q && (
-        <p className="mb-4 text-sm text-slate-500">
-          {result.totalElements} resultado{result.totalElements !== 1 ? "s" : ""} para &quot;{q}&quot;
-        </p>
-      )}
+        {result.content.length === 0 ? (
+          <EmptyState
+            icon="search"
+            title={q ? "Sin resultados" : "No hay programas disponibles"}
+            description={
+              q
+                ? "No se encontraron programas que coincidan con tu búsqueda."
+                : "No hay programas disponibles para esta categoría en este momento."
+            }
+            actionLabel="Ver todos los programas"
+            actionHref="/"
+          />
+        ) : (
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {result.content.map((p) => (
+              <ProgramaCard key={p.id} programa={p} tipoSlug={tipo} />
+            ))}
+          </div>
+        )}
 
-      {result.content.length === 0 ? (
-        <EmptyState
-          icon="search"
-          title={
-            q
-              ? "Sin resultados"
-              : "No hay programas disponibles"
-          }
-          description={
-            q
-              ? "No se encontraron programas que coincidan con tu búsqueda."
-              : "No hay programas disponibles para esta categoría en este momento."
-          }
-          actionLabel="Ver todos los programas"
-          actionHref="/"
-        />
-      ) : (
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {result.content.map((p) => (
-            <ProgramaCard key={p.id} programa={p} tipoSlug={tipo} />
-          ))}
-        </div>
-      )}
+        {totalPages > 1 && (
+          <div className="mt-12">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    href={`/${tipo}?page=${Math.max(0, page - 1)}&size=${size}${q ? `&q=${encodeURIComponent(q)}` : ""}`}
+                    aria-disabled={page === 0}
+                    className={page === 0 ? "pointer-events-none opacity-50" : ""}
+                  />
+                </PaginationItem>
 
-      <Paginacion
-        tipoSlug={tipo}
-        page={result.page}
-        totalPages={result.totalPages}
-        totalElements={result.totalElements}
-        size={result.size}
-        q={q || undefined}
-      />
-    </Container>
+                {Array.from({ length: totalPages }, (_, i) => {
+                  if (
+                    i === 0 ||
+                    i === totalPages - 1 ||
+                    (i >= page - 1 && i <= page + 1)
+                  ) {
+                    return (
+                      <PaginationItem key={i}>
+                        <PaginationLink
+                          href={`/${tipo}?page=${i}&size=${size}${q ? `&q=${encodeURIComponent(q)}` : ""}`}
+                          isActive={i === page}
+                        >
+                          {i + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    );
+                  }
+                  if (i === page - 2 || i === page + 2) {
+                    return (
+                      <PaginationItem key={`dots-${i}`}>
+                        <PaginationEllipsis />
+                      </PaginationItem>
+                    );
+                  }
+                  return null;
+                })}
+
+                <PaginationItem>
+                  <PaginationNext
+                    href={`/${tipo}?page=${Math.min(totalPages - 1, page + 1)}&size=${size}${q ? `&q=${encodeURIComponent(q)}` : ""}`}
+                    aria-disabled={page >= totalPages - 1}
+                    className={page >= totalPages - 1 ? "pointer-events-none opacity-50" : ""}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+
+            <p className="mt-4 text-center text-sm text-muted-foreground">
+              {result.totalElements} programas en total
+            </p>
+          </div>
+        )}
+      </Container>
+    </>
   );
 }

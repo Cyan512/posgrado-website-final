@@ -1,6 +1,6 @@
-import type { AsignaturaPorPeriodo } from "@/src/lib/types";
-import { CATEGORIA_MAP } from "@/src/lib/constants";
-import Badge from "./ui/Badge";
+﻿import type { AsignaturaPorPeriodo } from "@/lib/types";
+import { CATEGORIA_MAP } from "@/lib/constants";
+import { Badge } from "./ui/Badge";
 
 interface Props {
   bloque: AsignaturaPorPeriodo;
@@ -54,10 +54,11 @@ export default function AsignaturaPeriodo({ bloque }: Props) {
                   </td>
                   <td className="whitespace-nowrap px-5 py-3.5 text-sm">
                     <Badge
-                      color={
+                      variant="outline"
+                      className={
                         asig.categoria === "OE"
-                          ? "bg-brand-50 text-brand-700 ring-brand-600/20"
-                          : "bg-amber-50 text-amber-700 ring-amber-600/20"
+                          ? "bg-brand-50 text-brand-700 border-brand-200"
+                          : "bg-amber-50 text-amber-700 border-amber-200"
                       }
                     >
                       {CATEGORIA_MAP[asig.categoria] ?? asig.categoria}

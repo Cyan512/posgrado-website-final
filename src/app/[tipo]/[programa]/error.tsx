@@ -1,8 +1,8 @@
-"use client";
+﻿"use client";
 
 import { useEffect } from "react";
 import { AlertTriangle } from "lucide-react";
-import { PosgradoApiError, getErrorMessage } from "@/src/lib/errors";
+import { PosgradoApiError, getErrorMessage } from "@/lib/errors";
 
 export default function ProgramaError({
   error,

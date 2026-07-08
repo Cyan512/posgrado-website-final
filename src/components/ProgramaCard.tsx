@@ -1,8 +1,8 @@
-import Link from "next/link";
-import type { Programa } from "@/src/lib/types";
-import { MODALIDAD_MAP } from "@/src/lib/constants";
-import Card from "./ui/Card";
-import Badge from "./ui/Badge";
+﻿import Link from "next/link";
+import type { Programa } from "@/lib/types";
+import { MODALIDAD_MAP } from "@/lib/constants";
+import { Card, CardContent } from "./ui/Card";
+import { Badge } from "./ui/Badge";
 import { Building2, ArrowUpRight } from "lucide-react";
 
 interface Props {
@@ -18,8 +18,8 @@ export default function ProgramaCard({ programa, tipoSlug }: Props) {
 
   return (
     <Link href={`/${tipoSlug}/${programa.slug}`} className="group block">
-      <Card className="h-full">
-        <div className="flex h-full flex-col p-5">
+      <Card className="h-full transition-shadow hover:shadow-md hover:ring-foreground/15">
+        <CardContent className="flex h-full flex-col p-5">
           <div className="flex items-start justify-between gap-2">
             <h3 className="flex-1 font-semibold text-slate-900 group-hover:text-brand-700 transition-colors">
               {programa.nombre}
@@ -33,9 +33,9 @@ export default function ProgramaCard({ programa, tipoSlug }: Props) {
           </div>
 
           <div className="mt-auto pt-4">
-            <Badge color={modalidad.color}>{modalidad.label}</Badge>
+            <Badge variant="outline" className={`${modalidad.color} text-xs`}>{modalidad.label}</Badge>
           </div>
-        </div>
+        </CardContent>
       </Card>
     </Link>
   );

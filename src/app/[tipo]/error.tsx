@@ -1,9 +1,10 @@
-"use client";
+﻿"use client";
 
 import { useEffect } from "react";
 import { AlertTriangle } from "lucide-react";
-import { PosgradoApiError, getErrorMessage } from "@/src/lib/errors";
-import Button from "@/src/components/ui/Button";
+import { PosgradoApiError, getErrorMessage } from "@/lib/errors";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function TipoError({
   error,
@@ -35,8 +36,8 @@ export default function TipoError({
         >
           Reintentar
         </button>
-        <Button href="/" variant="secondary">
-          Volver al inicio
+        <Button variant="outline" asChild>
+          <Link href="/">Volver al inicio</Link>
         </Button>
       </div>
     </div>

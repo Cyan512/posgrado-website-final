@@ -1,5 +1,5 @@
-import type { InversionPrograma } from "@/src/lib/types";
-import { formatPEN } from "@/src/lib/format";
+﻿import type { InversionPrograma } from "@/lib/types";
+import { formatPEN } from "@/lib/format";
 import { Wallet, ChevronDown } from "lucide-react";
 
 interface Props {

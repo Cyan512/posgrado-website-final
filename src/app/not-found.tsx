@@ -1,5 +1,6 @@
+﻿import Link from "next/link";
 import { FileQuestion } from "lucide-react";
-import Button from "@/src/components/ui/Button";
+import { Button } from "@/components/ui/button";
 
 export default function NotFound() {
   return (
@@ -13,7 +14,9 @@ export default function NotFound() {
         La página que buscás no existe o fue movida.
       </p>
       <div className="mt-6">
-        <Button href="/">Volver al inicio</Button>
+        <Button asChild>
+          <Link href="/">Volver al inicio</Link>
+        </Button>
       </div>
     </div>
   );

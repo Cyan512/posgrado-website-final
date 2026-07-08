@@ -1,5 +1,6 @@
+import Link from "next/link";
 import { BookOpen } from "lucide-react";
-import Button from "./Button";
+import { Button } from "./button";
 
 interface EmptyStateProps {
   icon?: "search" | "empty" | "error";
@@ -35,8 +36,8 @@ export default function EmptyState({
       )}
       {actionLabel && actionHref && (
         <div className="mt-6">
-          <Button href={actionHref} variant="primary">
-            {actionLabel}
+          <Button asChild>
+            <Link href={actionHref}>{actionLabel}</Link>
           </Button>
         </div>
       )}
