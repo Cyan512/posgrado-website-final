@@ -17,17 +17,19 @@ export default function RootError({
   }, [error]);
 
   return (
-    <div className="flex flex-col items-center justify-center py-24 text-center">
-      <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-rose-50">
-        <AlertTriangle className="h-8 w-8 text-rose-600" />
+    <div className="flex min-h-[70vh] flex-col items-center justify-center px-4 text-center">
+      <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-rose-50">
+        <AlertTriangle className="h-10 w-10 text-rose-600" />
       </div>
-      <h1 className="text-xl font-semibold text-slate-900">Error inesperado</h1>
-      <p className="mt-2 max-w-sm text-sm text-slate-500">
-        {error.message || "Ocurrió un error al cargar esta página."}
+      <h1 className="font-display text-3xl font-normal italic text-slate-900 sm:text-4xl">
+        Algo salió mal
+      </h1>
+      <p className="mx-auto mt-4 max-w-md text-lg leading-relaxed text-muted-foreground">
+        {error.message || "Ocurrió un error inesperado al cargar esta página. Intentá de nuevo."}
       </p>
-      <div className="mt-6 flex gap-3">
-        <Button onClick={reset}>Reintentar</Button>
-        <Button variant="outline" asChild>
+      <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+        <Button size="lg" onClick={reset}>Reintentar</Button>
+        <Button variant="outline" size="lg" asChild>
           <Link href="/">Volver al inicio</Link>
         </Button>
       </div>

@@ -4,18 +4,31 @@ import { Button } from "@/components/ui/button";
 
 export default function NotFound() {
   return (
-    <div className="flex flex-col items-center justify-center py-24 text-center">
-      <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100">
-        <FileQuestion className="h-8 w-8 text-slate-500" />
+    <div className="flex min-h-[70vh] flex-col items-center justify-center px-4 text-center">
+      <div className="mb-8">
+        <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-muted">
+          <FileQuestion className="h-10 w-10 text-muted-foreground" />
+        </div>
       </div>
-      <h1 className="text-2xl font-bold text-slate-900">404</h1>
-      <p className="mt-2 text-sm text-slate-500">Página no encontrada</p>
-      <p className="mt-1 text-sm text-slate-400">
-        La página que buscás no existe o fue movida.
+
+      <p className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-brand-600">
+        Error 404
       </p>
-      <div className="mt-6">
-        <Button asChild>
+
+      <h1 className="mt-3 font-display text-4xl font-normal italic text-slate-900 sm:text-5xl">
+        Página no encontrada
+      </h1>
+
+      <p className="mx-auto mt-4 max-w-md text-lg leading-relaxed text-muted-foreground">
+        La página que buscás no existe o fue movida. Probá navegando desde el inicio.
+      </p>
+
+      <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+        <Button size="lg" asChild>
           <Link href="/">Volver al inicio</Link>
+        </Button>
+        <Button variant="outline" size="lg" asChild>
+          <Link href="/maestria">Ver programas</Link>
         </Button>
       </div>
     </div>
