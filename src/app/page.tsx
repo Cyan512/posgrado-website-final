@@ -1,6 +1,7 @@
 ﻿import { getTiposProgramas } from "@/lib/api";
 import type { TipoPrograma } from "@/lib/types";
 import Hero from "@/components/home/Hero";
+import { RectorMessage } from "@/components/home/RectorMessage";
 import { StatsSection } from "@/components/home/StatsSection";
 import { ProgramsSection } from "@/components/home/ProgramsSection";
 import { WhySection } from "@/components/home/WhySection";
@@ -8,7 +9,7 @@ import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { TrustBarSection } from "@/components/home/TrustBarSection";
 import { NewsSection } from "@/components/home/NewsSection";
 import { CtaSection } from "@/components/home/CtaSection";
-import { FaqSection } from "@/components/home/FaqSection";
+import { StudentInfo } from "@/components/home/StudentInfo";
 
 export default async function Home() {
   let tipos: TipoPrograma[] = [];
@@ -22,6 +23,7 @@ export default async function Home() {
   return (
     <>
       <Hero />
+      <RectorMessage />
       <StatsSection />
       <ProgramsSection tipos={tipos} />
       <WhySection />
@@ -29,7 +31,7 @@ export default async function Home() {
       <TrustBarSection />
       <NewsSection />
       <CtaSection />
-      <FaqSection />
+      <StudentInfo />
     </>
   );
 }

@@ -184,3 +184,20 @@ export const TIPOS_FALLBACK: TipoPrograma[] = [
   { id: 1, nombreTipoPrograma: "Maestría", slug: "maestria" },
   { id: 2, nombreTipoPrograma: "Doctorado", slug: "doctorado" },
 ];
+
+export interface RectorData {
+  nombre: string;
+  cargo: string;
+  iniciales: string;
+  mensaje: string;
+  ano: number;
+}
+
+export const RECTOR: RectorData = {
+  nombre: "Dr. Andrés Velásquez Morales",
+  cargo: "Rector",
+  iniciales: "AV",
+  mensaje:
+    "Nuestra Escuela de Posgrado representa el compromiso con la excelencia académica y la formación de profesionales capaces de transformar la sociedad. Cada programa está diseñado para cultivar el pensamiento crítico, la investigación rigurosa y la innovación que el país necesita. Los invitamos a ser parte de esta comunidad académica donde la tradición se encuentra con el futuro.",
+  ano: 2025,
+};
