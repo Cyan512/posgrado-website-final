@@ -8,8 +8,9 @@ import { RevealOnScroll } from "@/components/brand/RevealOnScroll";
 import { ProgrammeCard } from "@/components/brand/ProgrammeCard";
 import EmptyState from "@/components/ui/EmptyState";
 import { Input } from "@/components/ui/input";
-import { Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Search, X } from "lucide-react";
+import { IMAGES, IMAGE_ALTS } from "@/lib/images";
 import Link from "next/link";
 import {
   Pagination,
@@ -25,6 +26,11 @@ interface Props {
   params: Promise<{ tipo: string }>;
   searchParams: Promise<{ page?: string; size?: string; q?: string }>;
 }
+
+const tipoHeroImages: Record<string, keyof typeof IMAGES> = {
+  maestria: "collaboration",
+  doctorado: "research",
+};
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { tipo } = await params;
@@ -52,16 +58,22 @@ export default async function TipoPage({ params, searchParams }: Props) {
   const q = sp.q ?? "";
   const result = await getProgramasByTipo(tipo, { page, size, q });
   const totalPages = result.totalPages;
+  const imgKey = tipoHeroImages[tipo] ?? "library";
+  const capitalized = tipo.charAt(0).toUpperCase() + tipo.slice(1);
 
   return (
     <>
       <PageHero
-        variant="split"
-        eyebrow="Programas"
-        title={tipo.charAt(0).toUpperCase() + tipo.slice(1)}
-        description={TIPO_DESCRIPCION_MAP[tipo] ?? `Programas de ${tipo}.`}
+        variant="dark"
+        image={IMAGES[imgKey]}
+        imageAlt={IMAGE_ALTS[imgKey]}
+        eyebrow="Programas de"
+        title={capitalized}
+        description={TIPO_DESCRIPCION_MAP[tipo] ?? `Explorá nuestra oferta de ${tipo}.`}
         stats={[
           { value: String(result.totalElements), label: "Programas" },
+          { value: "3", label: "Modalidades" },
+          { value: "50+", label: "Años" },
         ]}
       />
 
@@ -109,9 +121,11 @@ export default async function TipoPage({ params, searchParams }: Props) {
               <EmptyState
                 icon="search"
                 title={q ? "Sin resultados" : "No hay programas disponibles"}
-                description={q
-                  ? "No se encontraron programas que coincidan con tu búsqueda."
-                  : "No hay programas disponibles para esta categoría en este momento."}
+                description={
+                  q
+                    ? "No se encontraron programas que coincidan con tu búsqueda."
+                    : "No hay programas disponibles para esta categoría en este momento."
+                }
                 actionLabel="Ver todos los programas"
                 actionHref="/"
               />
@@ -122,7 +136,7 @@ export default async function TipoPage({ params, searchParams }: Props) {
                     key={p.id}
                     programa={p}
                     tipoSlug={tipo}
-                    featured={i === 0 && page === 0 && !q}
+                    imageIndex={i}
                   />
                 ))}
               </div>
