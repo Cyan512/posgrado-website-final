@@ -1,17 +1,28 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { GraduationCap } from "lucide-react";
 import { motion } from "framer-motion";
 import Container from "../layout/Container";
 import { Button } from "../ui/button";
+import { IMAGES, IMAGE_ALTS } from "@/lib/images";
 
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-brand-950 via-brand-900 to-brand-800">
+    <section className="relative overflow-hidden bg-brand-950">
+      <Image
+        src={IMAGES.aerialCampus}
+        alt={IMAGE_ALTS.aerialCampus}
+        fill
+        className="object-cover opacity-25"
+        sizes="100vw"
+        priority
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-brand-950/60 via-brand-950/40 to-brand-950/80" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(255,255,255,0.06),transparent_50%)]" />
 
-      <Container className="relative py-24 sm:py-32 lg:py-40">
+      <Container className="relative py-28 sm:py-36 lg:py-44">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
@@ -52,14 +63,14 @@ export default function Hero() {
             transition={{ delay: 0.4, duration: 0.5 }}
             className="mt-10 flex flex-col justify-center gap-4 sm:flex-row"
           >
-            <Button size="lg" asChild className="h-11 px-8 bg-white text-brand-900 hover:bg-brand-50">
+            <Button size="lg" asChild className="h-12 px-8 bg-white text-brand-900 hover:bg-brand-50">
               <Link href="/maestria">Ver Maestrías</Link>
             </Button>
             <Button
               size="lg"
               variant="outline"
               asChild
-              className="h-11 px-8 border-white/20 bg-white/[0.04] text-white hover:bg-white/10 hover:text-white backdrop-blur"
+              className="h-12 px-8 border-white/20 bg-white/[0.04] text-white hover:bg-white/10 hover:text-white backdrop-blur"
             >
               <Link href="/doctorado">Ver Doctorados</Link>
             </Button>
@@ -70,7 +81,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 0.5 }}
-          className="mx-auto mt-20 grid max-w-2xl grid-cols-2 gap-6 sm:grid-cols-4"
+          className="mx-auto mt-24 grid max-w-2xl grid-cols-2 gap-6 sm:grid-cols-4"
         >
           {[
             { value: "50+", label: "Años de trayectoria" },

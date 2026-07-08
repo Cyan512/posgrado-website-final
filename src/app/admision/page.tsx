@@ -22,6 +22,7 @@ import {
   Award,
 } from "lucide-react";
 import { BECAS, FECHAS_ADMISION } from "@/lib/data";
+import { IMAGES, IMAGE_ALTS } from "@/lib/images";
 import Link from "next/link";
 
 const steps = [
@@ -94,7 +95,9 @@ export default function AdmisionPage() {
   return (
     <>
       <PageHero
-        variant="default"
+        variant="dark"
+        image={IMAGES.lecture}
+        imageAlt={IMAGE_ALTS.lecture}
         eyebrow="Admisión 2025"
         title="Tu próximo paso comienza acá"
         description="Conocé el proceso para postularte a nuestros programas de posgrado. Te acompañamos en cada etapa."

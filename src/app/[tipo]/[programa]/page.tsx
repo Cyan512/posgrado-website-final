@@ -1,4 +1,5 @@
 ﻿import { getProgramaBySlug } from "@/lib/api";
+import { IMAGES, IMAGE_ALTS } from "@/lib/images";
 import type { Metadata } from "next";
 import Container from "@/components/layout/Container";
 import Breadcrumb from "@/components/layout/Breadcrumb";
@@ -73,6 +74,8 @@ export default async function ProgramaPage({ params }: Props) {
     <>
       <PageHero
         variant="dark"
+        image={IMAGES.graduates}
+        imageAlt={IMAGE_ALTS.graduates}
         eyebrow={tipo.charAt(0).toUpperCase() + tipo.slice(1)}
         title={data.nombre}
         stats={[

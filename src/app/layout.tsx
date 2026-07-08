@@ -1,6 +1,7 @@
 ﻿import type { Metadata } from "next";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
 import "./globals.css";
 import { Geist, Instrument_Serif, Geist_Mono } from "next/font/google";
 import { cn } from "@/lib/utils";
@@ -66,6 +67,7 @@ export default function RootLayout({
     >
       <body className="flex min-h-full flex-col bg-background text-foreground font-sans">
         <TooltipProvider>
+          <AnnouncementBar />
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />

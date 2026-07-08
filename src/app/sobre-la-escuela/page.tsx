@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { RevealOnScroll } from "@/components/brand/RevealOnScroll";
 import { Shield, Star, Heart, Lightbulb, Users, Globe } from "lucide-react";
 import { ACREDITACIONES, DIRECTIVOS, HITOS, VALORES } from "@/lib/data";
+import { IMAGES, IMAGE_ALTS } from "@/lib/images";
 import Link from "next/link";
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -28,6 +29,8 @@ export default function SobrePage() {
     <>
       <PageHero
         variant="dark"
+        image={IMAGES.graduates}
+        imageAlt={IMAGE_ALTS.graduates}
         eyebrow="Sobre nosotros"
         title="Formamos líderes desde 1974"
         description="La Escuela de Posgrado combina tradición académica con visión de futuro. Más de cinco décadas formando profesionales e investigadores que transforman la sociedad."
