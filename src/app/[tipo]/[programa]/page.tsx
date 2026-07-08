@@ -10,7 +10,7 @@ import { RelatedProgrammes } from "@/components/brand/RelatedProgrammes";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Section } from "@/components/brand/Section";
-import { MODALIDAD_MAP } from "@/lib/constants";
+import { MODALIDAD_MAP, CATEGORIA_MAP } from "@/lib/constants";
 import { formatPEN } from "@/lib/format";
 import type { ProgramaDetalleResponse, AsignaturaPorPeriodo } from "@/lib/types";
 import {
@@ -315,7 +315,6 @@ function PlanTab({ bloques }: { bloques: AsignaturaPorPeriodo[] }) {
                   {bloque.asignaturas.map((asig, idx) => (
                     <tr key={idx} className="border-b border-border/20 transition-colors hover:bg-brand-50/20 last:border-b-0">
                       <td className="py-3.5 pl-6 pr-4 text-sm font-medium text-foreground">
-                        <span className={`mr-2 inline-block h-1.5 w-1.5 rounded-full align-middle ${asig.categoria === "OE" ? "bg-brand-500" : "bg-amber-500"}`} />
                         {asig.nombreAsignatura}
                       </td>
                       <td className="px-3 py-3.5 text-center text-sm tabular-nums text-muted-foreground">
@@ -323,7 +322,7 @@ function PlanTab({ bloques }: { bloques: AsignaturaPorPeriodo[] }) {
                       </td>
                       <td className="py-3.5 pl-3 pr-6 text-right text-xs font-medium">
                         <span className={`inline-block rounded-md px-2 py-0.5 text-xs font-medium ${asig.categoria === "OE" ? "bg-brand-50 text-brand-700" : "bg-amber-50 text-amber-700"}`}>
-                          {asig.categoria === "OE" ? "Obligatoria" : "Electiva"}
+                          {asig.categoria}
                         </span>
                       </td>
                     </tr>
@@ -355,7 +354,7 @@ function PlanTab({ bloques }: { bloques: AsignaturaPorPeriodo[] }) {
                         </div>
                       </div>
                       <span className={`text-xs font-medium ${asig.categoria === "OE" ? "text-brand-700" : "text-amber-700"}`}>
-                        {asig.categoria === "OE" ? "Obligatoria" : "Electiva"}
+                        {CATEGORIA_MAP[asig.categoria] ?? asig.categoria}
                       </span>
                     </li>
                   ))}
