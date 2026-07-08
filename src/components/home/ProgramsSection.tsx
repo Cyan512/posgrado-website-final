@@ -1,36 +1,77 @@
-import { getTiposProgramas } from "@/lib/api";
+import type { TipoPrograma } from "@/lib/types";
 import { TIPO_DESCRIPCION_MAP } from "@/lib/constants";
+import { TIPOS_FALLBACK } from "@/lib/data";
 import Container from "@/components/layout/Container";
 import { SectionHeader } from "@/components/brand/SectionHeader";
 import { RevealOnScroll } from "@/components/brand/RevealOnScroll";
 import { IMAGES, IMAGE_ALTS } from "@/lib/images";
 import Image from "next/image";
 import Link from "next/link";
-import { Card, CardContent } from "@/components/ui/Card";
-import { ArrowUpRight, GraduationCap, Microscope } from "lucide-react";
-import type { TipoPrograma } from "@/lib/types";
+import { ArrowUpRight } from "lucide-react";
 
-async function ProgramsSection() {
-  const tipos = await getTiposProgramas();
-  if (tipos.length === 0) return null;
+const tipoImages: Record<string, keyof typeof IMAGES> = {
+  maestria: "collaboration",
+  doctorado: "research",
+};
+
+interface Props {
+  tipos?: TipoPrograma[];
+}
+
+function ProgramsSection({ tipos = [] }: Props) {
+  const cards = tipos.length > 0 ? tipos : TIPOS_FALLBACK;
 
   return (
     <section className="py-20 sm:py-28">
       <Container>
         <SectionHeader
           eyebrow="Programas académicos"
-          title="Encontrá el programa ideal para vos"
+          title="Explorá nuestros programas"
           description="Elegí entre una amplia oferta de maestrías y doctorados diseñados con los más altos estándares académicos."
         />
 
         <RevealOnScroll className="mt-14">
-          <div className="grid gap-6 lg:grid-cols-2">
-            {tipos.map((tipo) => (
-              <TipoCardLarge key={tipo.id} tipo={tipo} />
-            ))}
+          <div className="flex items-stretch gap-2 h-[380px] sm:h-[420px] w-full max-w-6xl mx-auto overflow-x-auto sm:overflow-visible">
+            {cards.map((tipo) => {
+              const imgKey = tipoImages[tipo.slug] ?? "library";
+              const desc =
+                TIPO_DESCRIPCION_MAP[tipo.slug] ??
+                `Explorá todos nuestros programas de ${tipo.nombreTipoPrograma.toLowerCase()}.`;
+
+              return (
+                <Link
+                  key={tipo.id}
+                  href={`/${tipo.slug}`}
+                  className="relative group flex-1 min-w-[240px] sm:min-w-0 transition-all duration-500 overflow-hidden rounded-xl hover:flex-[2.5]"
+                  aria-label={tipo.nombreTipoPrograma}
+                >
+                  <Image
+                    src={IMAGES[imgKey]}
+                    alt={IMAGE_ALTS[imgKey] ?? tipo.nombreTipoPrograma}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    sizes="(max-width: 640px) 240px, (max-width: 1024px) 50vw, 33vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-brand-950/85 via-brand-950/25 to-transparent" />
+
+                  <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
+                    <h3 className="text-white font-bold text-2xl sm:text-3xl">
+                      {tipo.nombreTipoPrograma}
+                    </h3>
+                    <p className="mt-1 text-sm text-brand-200 line-clamp-2">{desc}</p>
+                  </div>
+
+                  <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/15 backdrop-blur text-white">
+                      <ArrowUpRight className="h-4 w-4" />
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
 
-          <div className="mt-8 text-center">
+          <div className="mt-10 text-center">
             <Link
               href="/maestria"
               className="inline-flex items-center gap-2 text-sm font-medium text-brand-700 hover:text-brand-500 transition-colors"
@@ -42,58 +83,6 @@ async function ProgramsSection() {
         </RevealOnScroll>
       </Container>
     </section>
-  );
-}
-
-const tipoImages: Record<string, keyof typeof IMAGES> = {
-  maestria: "collaboration",
-  doctorado: "research",
-};
-
-const tipoIcons: Record<string, React.ReactNode> = {
-  maestria: <GraduationCap className="h-6 w-6" />,
-  doctorado: <Microscope className="h-6 w-6" />,
-};
-
-function TipoCardLarge({ tipo }: { tipo: TipoPrograma }) {
-  const imgKey = tipoImages[tipo.slug] ?? "library";
-  const imgUrl = IMAGES[imgKey];
-  const icon = tipoIcons[tipo.slug] ?? <GraduationCap className="h-6 w-6" />;
-  const desc = TIPO_DESCRIPCION_MAP[tipo.slug] ?? `Explorá nuestros programas de ${tipo.nombreTipoPrograma.toLowerCase()}.`;
-
-  return (
-    <Link href={`/${tipo.slug}`} className="group block">
-      <Card className="overflow-hidden border-0 shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-        <div className="relative h-48 overflow-hidden">
-          <Image
-            src={imgUrl}
-            alt={IMAGE_ALTS[imgKey] ?? `Imagen de ${tipo.nombreTipoPrograma}`}
-            fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-            sizes="(max-width: 1024px) 100vw, 50vw"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-brand-950/80 via-brand-950/30 to-transparent" />
-          <div className="absolute bottom-0 left-0 right-0 p-6">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/20 backdrop-blur text-white">
-                {icon}
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-white">{tipo.nombreTipoPrograma}</h3>
-                <p className="text-sm text-brand-200 line-clamp-1">{desc}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <CardContent className="p-5">
-          <p className="text-sm leading-relaxed text-muted-foreground">{desc}</p>
-          <div className="mt-3 flex items-center gap-1 text-sm font-medium text-brand-700">
-            Explorar programas
-            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </div>
-        </CardContent>
-      </Card>
-    </Link>
   );
 }
 

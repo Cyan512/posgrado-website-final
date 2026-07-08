@@ -1,4 +1,6 @@
-﻿import Hero from "@/components/home/Hero";
+﻿import { getTiposProgramas } from "@/lib/api";
+import type { TipoPrograma } from "@/lib/types";
+import Hero from "@/components/home/Hero";
 import { StatsSection } from "@/components/home/StatsSection";
 import { ProgramsSection } from "@/components/home/ProgramsSection";
 import { WhySection } from "@/components/home/WhySection";
@@ -8,12 +10,20 @@ import { NewsSection } from "@/components/home/NewsSection";
 import { CtaSection } from "@/components/home/CtaSection";
 import { FaqSection } from "@/components/home/FaqSection";
 
-export default function Home() {
+export default async function Home() {
+  let tipos: TipoPrograma[] = [];
+
+  try {
+    tipos = await getTiposProgramas();
+  } catch (err) {
+    console.warn("Home: API no disponible para tipos", err);
+  }
+
   return (
     <>
       <Hero />
       <StatsSection />
-      <ProgramsSection />
+      <ProgramsSection tipos={tipos} />
       <WhySection />
       <TestimonialsSection />
       <TrustBarSection />

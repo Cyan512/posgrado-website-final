@@ -177,3 +177,10 @@ export const VALORES = [
   { titulo: "Colaboración", descripcion: "Fomentamos el trabajo en red entre disciplinas, instituciones y países.", icono: "users" },
   { titulo: "Diversidad", descripcion: "Valoramos perspectivas múltiples como fuente de creatividad y rigor.", icono: "globe" },
 ];
+
+import type { TipoPrograma } from "./types";
+
+export const TIPOS_FALLBACK: TipoPrograma[] = [
+  { id: 1, nombreTipoPrograma: "Maestría", slug: "maestria" },
+  { id: 2, nombreTipoPrograma: "Doctorado", slug: "doctorado" },
+];
